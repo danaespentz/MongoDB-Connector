@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:3.6.10
+    ports:
+      - 27018:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=username
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - data:/data/db
+
+  service:
+    build:
+      context: ./service  
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=mongodb://username:password@IP_ADDRESS:PORT/
+    depends_on:
+      - mongodb
+
+volumes:
+  data:
